@@ -1,13 +1,13 @@
 import Nav from "react-bootstrap/Nav";
-// import { logo4 } from "./Images/Logo/L4.png";
 
-function AlignmentExample() {
+function NavBar() {
   return (
     <>
       <Nav className="justify-content-center" activeKey="#">
         {/* <Nav.Item>
           <img src={logo4} alt="logo" />
         </Nav.Item> */}
+
         <Nav.Item>
           <Nav.Link>Logo</Nav.Link>
         </Nav.Item>
@@ -31,4 +31,4 @@ function AlignmentExample() {
   );
 }
 
-export default AlignmentExample;
+export default NavBar;
