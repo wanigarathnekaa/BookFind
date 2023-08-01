@@ -6,6 +6,7 @@
     box-sizing: border-box;
     font-family: 'Open Sans', sans-serif;
     font-weight: 3px;
+    background-color: #142850;
 }
 
 :root{
@@ -42,4 +43,29 @@ nav a:hover{
 img {
     height: 35px;
     width: 150px;
+}
+
+.content{
+    position: absolute;
+    left: 100px;
+    top: 34%;
+    color: var(--textColor);
+}
+
+.para1, .para2{
+    font-size: 20px ;
+    padding: 10px 10px;
+}
+
+h1{
+    font-size: 75px;
+    font-weight: 100px;
+}
+
+.Bookstore{
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    right: 200px;
+    top: 45%;
 }
