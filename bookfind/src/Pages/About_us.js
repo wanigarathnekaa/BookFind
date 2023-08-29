@@ -1,13 +1,13 @@
 import React from 'react';
-import Navbar from "../Components/NavBar";
-import img1 from "../images/BackIMG1.png";
+import AboutUsNavbar from "../Components/AboutUsNavBar";
+// import img1 from "../images/BackIMG1.png";
+import '../styles/Styles1.css';
 
 function AboutUsPage() {
-    
   return (
     <div className= "Aboutus">
-        <Navbar />
-        {/* <img src={img1} alt='backgroundImage'></img> */}
+          <AboutUsNavbar />
+        
         <h1>WHO WE ARE</h1>
         <p>
             Welcome to Bookfind, the centralized website that transforms your<br></br>

@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "./Components/NavBar";
 import Body from "./Components/BodyContent";
 import Bookstore from "./Components/BookStore";
+import './styles/Styles.css'
 
 function App() {
   return (

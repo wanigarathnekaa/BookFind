@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from "../Components/NavBar";
+import '../styles/Styles.css';
 
 function MagazinesPage() {
   return (
