@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+*{
+    padding: 0px;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 3px;
+    background-color: transparent;
+}
+
+:root{
+    --mainColor: #142850;
+    --mainColorLight:#27496D;
+    --secondaryColor: #00909E;
+    --textColor: #DAE1E7;
+}
+
+.AbtusNavBar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 0px;
+    padding: 0 2rem;
+    background-color: var(--mainColor);
+    color: var(--textColor);
+}
+
+.AbtusNavBar nav{
+    text-align: center;
+}
+
+.AbtusNavBar nav a {
+    margin: 0 2rem;
+    color: var(--textColor);
+    text-decoration: none;
+}
+
+.AbtusNavBar nav a:hover{
+    color: var(--secondaryColor);
+}
+
+.AbtusNavBar img {
+    height: 35px;
+    width: 150px;
+}
+
+.Aboutus{
+    background-image: url(../images/Backg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 50px;
+    color: var(--textColor);
+    text-align: center;
+    line-height: 1.5;
+    height: 100vh;
+}
+
+.Aboutus h1{
+    font-size: 60px;
+    letter-spacing: 0.8px;
+    padding-top: 75px;
+}
+
+.Aboutus p{
+    letter-spacing: 0.8px;
+    padding-top: 40px;
+}
