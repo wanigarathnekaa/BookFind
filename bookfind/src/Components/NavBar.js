@@ -7,10 +7,10 @@ function Navbar(){
         <header>
             <img src={img1} />
             <nav>
-                <a href="#">HOME</a>
-                <a href="#">Books</a>
-                <a href="#">Magazines</a>
-                <a href="#">About Us</a>
+                <a href="/">HOME</a>
+                <a href="/Books">Books</a>
+                <a href="/Magazines">Magazines</a>
+                <a href="/About_us">About Us</a>
                 <a href="#">Vendors</a>
                 <a href="#">Login</a>
             </nav>
