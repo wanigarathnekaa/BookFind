@@ -6,7 +6,7 @@
     box-sizing: border-box;
     font-family: 'Open Sans', sans-serif;
     font-weight: 3px;
-    background-color: #142850;
+    /* background-color: #142850; */
 }
 
 :root{
@@ -22,7 +22,7 @@ header{
     justify-content: space-between;
     height: 80px;
     padding: 0 2rem;
-    background-color: var(--mainColor);
+    /* background-color: var(--mainColor); */
     color: var(--textColor);
 }
 
@@ -68,4 +68,19 @@ h1{
     position: absolute;
     right: 200px;
     top: 45%;
+}
+
+.Aboutus{
+    background-image: url(../images/BackIMG1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 50px;
+    color: var(--textColor);
+    text-align: center;
+    line-height: 1.5;
+}
+
+.Aboutus p{
+    letter-spacing: 0.8px;
+    padding-top: 50px;
 }
