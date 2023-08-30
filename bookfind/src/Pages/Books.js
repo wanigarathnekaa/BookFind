@@ -5,6 +5,7 @@ import Navbar from '../Components/NavBar';
 import img from '../images/Book1.jpg'
 import "../styles/Styles.css";
 import { Button } from '@material-ui/core';
+import Table from '../Components/BookTable';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -48,9 +49,10 @@ const BookPage = (props) => {
                 >
                     Find A Copy
                 </Button>
-              <p className = "BookPgpara">
+              {/* <p className = "BookPgpara">
                 //Book Details
-              </p>
+              </p> */}
+              <Table></Table>
             </div>
           </Grid>
         </Grid>
