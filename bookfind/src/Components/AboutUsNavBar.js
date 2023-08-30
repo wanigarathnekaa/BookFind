@@ -9,10 +9,9 @@ function AboutUsNavBar(){
             <nav>
                 <a href="/">HOME</a>
                 <a href="/Books">Books</a>
-                <a href="/Magazines">Magazines</a>
                 <a href="/About_us">About Us</a>
                 <a href="#">Vendors</a>
-                <a href="#">Login</a>
+                <a href="/SignInPage">SignIn</a>
             </nav>
         </header>
     );

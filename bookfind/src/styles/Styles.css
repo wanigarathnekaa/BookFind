@@ -40,16 +40,23 @@ nav a:hover{
     color: var(--secondaryColor);
 }
 
-img {
+header img{
     height: 35px;
     width: 150px;
 }
 
 .content{
-    position: absolute;
+    position: relative;
     left: 100px;
-    top: 34%;
+    padding-top: 7rem;
     color: var(--textColor);
+    height: 100vh;
+}
+
+.content img{
+    position: absolute;
+    right: 16rem;
+    top: 5rem;
 }
 
 .para1, .para2{
@@ -68,4 +75,47 @@ h1{
     position: absolute;
     right: 200px;
     top: 45%;
-} 
+}
+
+.bookImage, .bookPara{
+    position: relative;
+    padding: 3rem;
+    padding-top: 5rem;  
+}
+
+.bookPara{
+    padding-top: 6rem;
+    align-items: left;
+}
+
+.bookImage img{
+    border-radius: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.bookPara p{
+    color: var(--textColor);
+    font-family: 'Open Sans Condensed';
+    font-weight: bold;
+    font-size: 1.3rem;
+    text-align: left;
+    line-height: 2rem; 
+    letter-spacing: 0.16rem;
+}
+
+.learnMore{
+    color: var(--secondaryColor);
+    text-decoration: none;
+    padding-top: 0.5rem;
+}
+
+.bookPara h1{
+    position: absolute;
+    opacity: 0.2;
+    right: 1rem;
+    font-size: 4.5rem;
+    color: #00909E;
+}
