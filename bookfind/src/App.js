@@ -1,7 +1,9 @@
 import React from "react";
 import Navbar from "./Components/NavBar";
 import Body from "./Components/BodyContent";
-import Bookstore from "./Components/BookStore";
+import TrendingBooks from "./Components/TrendingBooks";
+import BookRec from "./Components/BookRec";
+// import Bookstore from "./Components/BookStore";
 import './styles/Styles.css'
 
 function App() {
@@ -9,7 +11,9 @@ function App() {
     <React.Fragment>
       <Navbar />
       <Body />
-      <Bookstore />
+      <TrendingBooks />
+      <BookRec />
+      {/* <Bookstore /> */}
     </React.Fragment>
     
   );
