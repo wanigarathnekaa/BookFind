@@ -119,3 +119,39 @@ h1{
     font-size: 4.5rem;
     color: #00909E;
 }
+
+.bookPgimg img{
+    padding-top: 2.5rem;
+    border-radius: 8px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+.bookPg h1{
+    position: absolute;
+    opacity: 0.1;
+    left: 1rem;
+    font-size: 4.5rem;
+    color: #00909E;
+}
+
+.title{
+    font-weight: 2px;
+    font-size: 3rem;
+    letter-spacing: 0.3rem;
+    padding-top: 4rem;
+    color: var(--textColor);
+}
+
+.author{
+    font-style: italic;
+    font-weight: lighter;
+    font-size: 1.5rem;
+    color: var(--secondaryColor);
+}
+
+.author span{
+    color: #fc7100;
+}
