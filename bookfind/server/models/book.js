@@ -7,7 +7,7 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-
+    
     author: {
         type: String,
         required: true
@@ -31,7 +31,7 @@ const bookSchema = new mongoose.Schema({
 
     noOfPages: {
         type: Number,
-        required: true
+        required: false
     },
 
     copies: {
@@ -46,7 +46,7 @@ const bookSchema = new mongoose.Schema({
 
     isbn: {
         type: String,
-        required: true
+        required: false
     },
 
     categories: {
@@ -55,28 +55,29 @@ const bookSchema = new mongoose.Schema({
                 type: String,
             }
         ],
-        required: true
+        required: false
     },
 
     rating: {
         type: Number,
-        required: false
+        required: false,
+        default: 5.0
     },
 
     unitPrice: {
         type: Number,
-        required: true
+        required: false
     },
 
     publishedDate: {
         type: Date,
-        required: true
+        required: false
     },
 
     image: {
         type: String,
-        required: true
-    },
+        required: false
+    }
 });
 
 // export the book model

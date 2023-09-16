@@ -1,59 +1,26 @@
 import * as React from "react";
 import {
   Grid,
-  Drawer,
   List,
   ListItem,
-  IconButton,
-  useMediaQuery,
   Button,
   Typography,
+  Avatar,
+  Box,
+  Divider,
 } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
 
-// import BookstoreInfo from "../../components/vendor-components/BookstoreInfo";
-import ReservationsDataGrid from "../../components/admin-components/ReservationsDataGrid";
+import ReservationsGrid from "../../components/vendor-components/ReservationsGrid";
 import BooksGrid from "../../components/vendor-components/BooksGrid";
 import VendorProfile from "../../components/vendor-components/VendorProfile";
 
 const VendorDashboard = () => {
-  const isMobile = useMediaQuery("(max-width:600px)");
-  const [open, setOpen] = React.useState(!isMobile);
   const [activeButton, setActiveButton] = React.useState("bookstore");
-
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
 
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
-    {
-      isMobile && toggleDrawer();
-    }
   };
-
-  const drawer = (
-    <div style={{ width: "100vw" }}>
-      <List>
-        <ListItem>
-          <Button onClick={() => handleButtonClick("bookstore")}>
-            Bookstore Info
-          </Button>
-        </ListItem>
-        <ListItem>
-          <Button onClick={() => handleButtonClick("books")}>Books</Button>
-        </ListItem>
-        <ListItem>
-          <Button onClick={() => handleButtonClick("reservations")}>
-            Reservations
-          </Button>
-        </ListItem>
-        <ListItem>
-          <Button onClick={() => handleButtonClick("logout")}>Log Out</Button>
-        </ListItem>
-      </List>
-    </div>
-  );
 
   let rightGridComponent;
   switch (activeButton) {
@@ -64,7 +31,7 @@ const VendorDashboard = () => {
       rightGridComponent = <BooksGrid />;
       break;
     case "reservations":
-      rightGridComponent = <ReservationsDataGrid />;
+      rightGridComponent = <ReservationsGrid />;
       break;
     case "logout":
       rightGridComponent = <div>Log Out</div>;
@@ -73,35 +40,59 @@ const VendorDashboard = () => {
       rightGridComponent = <div>Unknown button clicked</div>;
   }
 
+  const StyledAvatar = styled(Avatar)(({ theme }) => ({
+    width: 60,
+    height: 60,
+    margin: "auto",
+    marginBottom: theme.spacing(2),
+  }));
+
+  const StyledButton = styled(Button)(({ theme }) => ({
+    backgroundColor: "#142850",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#1f4068",
+    },
+  }));
+
   return (
     <>
-      <div style={{ textAlign: "center" }}>
-        <Typography variant="h4">Vendor Dashboard</Typography>
-      </div>
-      <Grid container sx={{ border: "1px solid black" }}>
-        {!isMobile && (
-          <Grid item xs={12} sm={4} sx={{ minHeight: "85vh" }}>
-            {drawer}
-          </Grid>
-        )}
-        <Grid
-          item
-          xs={12}
-          sm={isMobile ? 12 : 8}
-          sx={{ outline: "1px solid black", minHeight: "85vh" }}
-        >
-          {isMobile && (
-            <IconButton onClick={toggleDrawer}>
-              <MenuIcon />
-            </IconButton>
-          )}
-          {rightGridComponent}
+      <Grid
+        container
+        sx={{
+          backgroundColor: "#f5f5f5",
+          minHeight: "100vh",
+          padding: "1rem",
+        }}
+      >
+        <Grid item xs={12} sx={{ marginBottom: "2rem" }}>
+          <StyledAvatar alt="Vendor" src="/static/images/avatar/1.jpg" />
+          <Typography variant="h4" sx={{ textAlign: "center", color: "#142850" }}>
+            Vendor Dashboard
+          </Typography>
         </Grid>
-        {isMobile && (
-          <Drawer anchor="left" open={open} onClose={toggleDrawer}>
-            {drawer}
-          </Drawer>
-        )}
+        <Grid container sx={{ border: "1px solid #d3d3d3", borderRadius: "10px" }}>
+          <Grid
+            item
+            xs={12}
+            sx={{ outline: "1px solid #d3d3d3", minHeight: "85vh" }}
+          >
+            <Box sx={{ padding: "1rem" }}>
+              <StyledButton onClick={() => handleButtonClick("bookstore")} sx={{ marginRight: "1rem" }}>
+                Bookstore Info
+              </StyledButton>
+              <StyledButton onClick={() => handleButtonClick("books")} sx={{ marginRight: "1rem" }}>
+                Books
+              </StyledButton>
+              <StyledButton onClick={() => handleButtonClick("reservations")} sx={{ marginRight: "1rem" }}>
+                Reservations
+              </StyledButton>
+              <StyledButton onClick={() => handleButtonClick("logout")}>Log Out</StyledButton>
+            </Box>
+            <Divider />
+            <Box sx={{ padding: "1rem" }}>{rightGridComponent}</Box>
+          </Grid>
+        </Grid>
       </Grid>
     </>
   );

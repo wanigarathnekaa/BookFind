@@ -1,4 +1,5 @@
 import { Navigate, useRoutes } from "react-router-dom";
+// import ProtectedRoutes from "./ProtectedRoutes";
 
 import Home from "./pages/bookfind/Home";
 import Books from "./pages/bookfind/Books";
@@ -13,11 +14,16 @@ import Profile from "./pages/bookfind/UserProfile";
 import AvailableBookstores from "./pages/bookfind/AvailableBookstores";
 import VendorPage from "./pages/bookfind/VendorPage";
 import BookPage from "./pages/bookfind/BookPage";
+import FeaturedBook from "./pages/bookfind/FeaturedBook";
 
 import Page404 from "./pages/Page404";
 
 import VendorDashboard from "./pages/vendor/VendorDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+
+import AuthorPage from "./pages/bookfind/AuthorPage";
+import Authors from "./pages/bookfind/Authors";
+
 
 import VendorSignUp from "./pages/vendor/VendorSignUp";
 import VendorLogIn from "./pages/vendor/VendorLogIn";
@@ -38,10 +44,10 @@ function Router() {
       path: "/books",
       element: <Books instance={instance} />,
     },
-    {
-      path: "/bookstores",
-      element: <Bookstores instance={instance} />,
-    },
+    // {
+    //   path: "/bookstores",
+    //   element: <Bookstores instance={instance} />,
+    // },
     {
       path: "/vendors",
       element: <Vendors instance={instance} />,
@@ -55,13 +61,15 @@ function Router() {
       element: <Login instance={instance} />,
     },
     {
-      path: "/signup",
+      path: "/register",
       element: <Signup instance={instance} />,
     },
     {
       path: "/profile",
+      // element: <ProtectedRoute><Profile instance={instance} /></ProtectedRoute>
       element: <Profile instance={instance} />,
     },
+    
     {
       path: "/vendor-dashboard",
       element: <VendorDashboard instance={instance} />,
@@ -91,6 +99,19 @@ function Router() {
       path: "/vendor-login",
       element: <VendorLogIn instance={instance} />,
     },
+    {
+      path: "/featuredbook",
+      element: <FeaturedBook instance={instance} />,
+    },
+    {
+      path: "/authors",
+      element: <Authors instance={instance} />,
+    },
+    {
+      path: "/author",
+      element: <AuthorPage instance={instance} />,
+    },
+
   
 
     // 404

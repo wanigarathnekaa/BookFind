@@ -20,6 +20,7 @@ const About = () => {
       width: "100%", // Set width to 100%
       margin: "auto",
       color: "#DAE1E7",
+      paddingTop: "3rem",
     },
     heading: {
       padding: 0,
@@ -27,11 +28,11 @@ const About = () => {
       fontSize: "4.5rem",
       fontWeight: "1100",
       letterSpacing: "0.1rem",
-      paddingTop: "3rem",
+      paddingTop: "0rem",
       textAlign: "center",
     },
     paragraph: {
-      padding: 0,
+      padding: "0rem 2rem 2rem 2rem",
       fontSize: "1.2rem",
       textAlign: "center",
       maxWidth: "50rem",
@@ -68,8 +69,8 @@ const About = () => {
             <hr style={styles.line} />
           </div>
         </div>
-        <div style={{position:"absolute", bottom:0, width:"100%"}}>
-            <Footer />
+        <div style={{position:"absolute", bottom:0, width:"100%"}}> 
+          <Footer />
         </div>
       </div>
       

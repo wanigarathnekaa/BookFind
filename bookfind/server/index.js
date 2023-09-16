@@ -9,20 +9,26 @@ const cookieParser = require("cookie-parser");
 
 // import routes
 const authRouter = require("./routes/authRouter");
+const authorRouter = require("./routes/authorRouter");
 const bookRouter = require("./routes/bookRouter");
-const bookstoreRouter = require("./routes/vendorRouter");
-const copyRouter = require("./routes/copyRouter");
+const bookstoreRouter = require("./routes/bookstoreRouter");
+// const copyRouter = require("./routes/copyRouter");
+const findACopyRouter = require("./routes/findACopyRouter");
 const reservationRouter = require("./routes/reservationRouter");
 const userRouter = require("./routes/userRouter");
-const bookController = require("./controllers/bookController");
-const vendorController = require("./controllers/vendorController");
-const findACopyController = require("./controllers/findACopyController");
-const bookstoreController = require("./controllers/bookstoreController");
+const vendorRouter = require("./routes/vendorRouter");
+const uploadRouter = require("./routes/uploadRouter");
 
 // do not load the environment varibles on a production environment
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
+
+// HANDELING UPLOADS
+const { parseFormData } = require("pechkin");
+const fs = require("fs");
+const path = require("path");
+//const pechkinFileUpload = require("./controllers/upload.js");
 
 // setup express
 const app = express();
@@ -90,17 +96,27 @@ const initializePassport = require("./passport-config");
 initializePassport(passport);
 
 // routes for REST API
-// app.use("/api/auth", authRouter);
-app.use("/api/book", bookController);
-app.use("/api/vendor", vendorController);
-app.use("/api/bookstore", bookstoreController);
-
+app.use("/api/auth", authRouter);
+app.use("/api/author", authorRouter);
+app.use("/api/book", bookRouter);
+app.use("/api/bookstore", bookstoreRouter);
 // app.use("/api/copy", copyRouter);
-// app.use("/api/reservation", reservationRouter);
-// app.use("/api/user",userRouter);
+app.use("/api/findACopy", findACopyRouter);
+app.use("/api/reservation", reservationRouter);
+app.use("/api/vendor", vendorRouter);
+app.use("/api/user", userRouter);
+app.use("/api/upload", uploadRouter);
 
 // test
-app.get("/", (req, res) => console.log(req, res));
+app.get("/", (req, res) => {
+  Post.find({})
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.status(408).json({ error });
+    });
+});
 
 // server connection
 const PORT = process.env.PORT || 8080;
