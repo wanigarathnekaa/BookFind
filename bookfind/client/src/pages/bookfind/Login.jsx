@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Grid } from "@mui/material";
 import loginImage from "../../assets/loginpage.png";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -11,25 +13,57 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
+const API_URL = "/api/auth/";
+
 const Login = () => {
   const [shouldRememberUser, setShouldRememberUser] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
 
   const handleRememberMeChange = (event) => {
     setShouldRememberUser(event.target.checked);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // TODO: Add form validation and submit logic
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    console.log("Form data:", formData);
+
+    try {
+      const response = await axios.post(API_URL + "login", formData);
+
+      if (response.data) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        navigate("/profile");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
   const styles = {
+    container: {
+      display: "flex",
+      height: "100vh",
+      alignItems: "center",
+    },
     root: {
       backgroundColor: "#142850",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      height: "100vh",
+      // height: "100vh",
     },
     formControl: {
       display: "flex",
@@ -88,7 +122,7 @@ const Login = () => {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} style={styles.container}>
       <Grid
         container
         item
@@ -104,7 +138,8 @@ const Login = () => {
             // maxHeight: "50%",
             width: "50%",
             height: "auto",
-            margin: "1rem 0 1rem 0",
+            margin: "1rem 0 0 0",
+            paddingBottom: "0",
             "@media (min-width: 960px)": {
               width: "70%",
               height: "70%",
@@ -128,6 +163,9 @@ const Login = () => {
                 variant="outlined"
                 type="email"
                 required
+                name="email"
+                value={formData.userEmail}
+                onChange={onChange}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
@@ -155,6 +193,9 @@ const Login = () => {
                 variant="outlined"
                 type="password"
                 required
+                name="password"
+                value={formData.userPassword}
+                onChange={onChange}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
@@ -207,7 +248,7 @@ const Login = () => {
               {/* Sign up link */}
               <Typography variant="body1" gutterBottom style={styles.signUp}>
                 No account?{" "}
-                <Link href="/signup" style={styles.signUpLink}>
+                <Link href="/register" style={styles.signUpLink}>
                   Sign up here
                 </Link>
               </Typography>

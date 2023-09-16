@@ -1,111 +1,191 @@
-const express = require("express");
-const router = express.Router();
+// import vendor model
+const passport = require("passport");
+const bcrypt = require("bcrypt")
+const Vendor = require("../models/vendor.js");
 
-const vendor = require("../models/vendor.js");
-const Book = require("../models/book.js");
+// register a new vendor
+const registerVendor = async (req, res) => {
+	const { name, email, phoneNumber, location, brn, password } = req.body;
 
-// Create new vendor
-//  {
-//   "name": "Books R Us",
-//   "location": "123 Book Street, Libraryville",
-//   "contact": {
-//     "phone": "555-123-4567",
-//     "email": "info@booksrus.com"
-//   },
-//   "availableBooks": ["64f0b94793998140be652e03","64f0b9a38451bcaa0840c758"],
-//   "image": "https: //example.com/vendor-image.jpg"
-// }
+	const newVendor = new Vendor({
+		name,
+		email,
+		phoneNumber,
+		location,
+		brn
+	});
 
-router.post("/new", async (req, res) => {
-  const { name, location, contact, availableBooks, image } = req.body;
+	const salt = await bcrypt.genSalt(10)
+	const hashedPassword = await bcrypt.hash(password, salt)
 
-  const newVendor = new vendor({
-    name,
-    location,
-    contact,
-    availableBooks,
-    image,
-  });
+	try {
+		await Vendor.create({ name: name, email: email, phoneNumber: phoneNumber, location: location, brn: brn, password: hashedPassword });
+		res.send({
+			data: "Add successfull",
+		});
+	} catch (e) {
+		console.log(e);
+	}
+	console.log("New vendor added to DB");
+};
 
-  try {
-    await newVendor.save();
-    res.send({
-      data: "Add successfull",
-    });
-  } catch (e) {
-    console.log(e);
-  }
-  console.log("New vendor added to DB");
-});
+// login vendor
+const loginVendor = async (req, res, next) => {
+	try {
+		const vendor = await Vendor.findOne({ email: req.body.email });
 
-// Search vendors
-router.post("/search", async (req, res) => {
-  const { name } = req.body;
+		if (!vendor) {
+			return res.status(404).json({ success: false, message: "vendor not found" });
+		}
 
-  try {
-    const regex = new RegExp(name, "i");
-    vendor.find({ name: { $regex: regex } }).then((data) => {
-      res.send(data);
-    });
-  } catch (e) {
-    res.send({
-      data: "No vendors are available by that name",
-    });
-  }
-});
+		const match = await bcrypt.compare(req.body.password, vendor.password)
+		if (!match) {
+			console.log("password error");
+			return (res.status(401).json({ success: false, message: "Password incorrect" }))
+		}
+		console.log(req.body, match);
 
-// Get specific vendor
-router.post("/get", async (req, res) => {
-  const { id } = req.body;
+		req.login(vendor, (err) => {
+			if (err) {
+				return res.status(500).json({ success: false, err });
+			}
+			return res.status(200).json({ success: true, vendor });
+		});
+	} catch (err) {
+		return res.status(500).json({ success: false, err });
+	}
+};
 
-  vendor
-    .findById(id)
-    .populate("availableBooks") // Populate the availableBooks field
-    .then(function (vendor) {
-      res.send(vendor);
-      console.log(vendor);
-    })
-    .catch(function (err) {
-      res.status(500).send(err);
-    });
-});
+// search vendors
+const searchVendors = async (req, res) => {
+	const { name } = req.body;
 
-// Get all vendors
-router.get("/all", async (req, res) => {
-  try {
-    vendor.find().then((data) => {
-      res.send(data);
-    });
-  } catch (e) {
-    res.send({
-      data: "Error fetching all vendors list",
-    });
-  }
-});
+	try {
+		const regex = new RegExp(name, "i");
+		Vendor.find({ name: { $regex: regex } }).then((data) => {
+			res.send(data);
+		});
+	} catch (e) {
+		res.send({
+			data: "No vendors are available by that name",
+		});
+	}
+};
 
-// Delete a vendor by ID
-router.post("/delete", async (req, res) => {
-  try {
-    const idsToDelete = req.body.data; // Assuming you are passing an array of IDs as 'ids' in the request body
-    // Check if the vendor with the provided IDs exist
-    for (const id of idsToDelete) {
-      const vendorToDelete = await vendor.findById(id);
-      if (!vendorToDelete) {
-        return res.status(404).send({
-          data: `Vendor with ID ${id} not found`,
-        });
-      }
-      await vendorToDelete.deleteOne();
-    }
-    res.send({
-      data: "Vendors deleted successfully",
-    });
-  } catch (e) {
-    console.error(e);
-    res.status(500).send({
-      data: "Internal server error",
-    });
-  }
-});
+// get a specific vendor
+const getVendor = async (req, res) => {
+	const { id } = req.body;
 
-module.exports = router;
+	Vendor
+		.findById(id)
+		.populate("availablevendors") // Populate the availablevendors field
+		.then(function (vendor) {
+			res.send(vendor);
+			console.log(vendor);
+		})
+		.catch(function (err) {
+			res.status(500).send(err);
+		});
+};
+
+// get all vendors
+const getAllVendors = async (req, res) => {
+	try {
+		Vendor.find().then((data) => {
+			res.send(data);
+		});
+	} catch (e) {
+		res.send({
+			data: "Error fetching all vendors list",
+		});
+	}
+};
+
+// delete vendors
+const deleteVendor = async (req, res) => {
+	try {
+		const idsToDelete = req.body.data; // Assuming you are passing an array of IDs as 'ids' in the request body
+		// Check if the vendor with the provided IDs exist
+		for (const id of idsToDelete) {
+			const vendorToDelete = await Vendor.findById(id);
+			if (!vendorToDelete) {
+				return res.status(404).send({
+					data: `Vendor with ID ${id} not found`,
+				});
+			}
+			await vendorToDelete.deleteOne();
+		}
+		res.send({
+			data: "Vendors deleted successfully",
+		});
+	} catch (e) {
+		console.error(e);
+		res.status(500).send({
+			data: "Internal server error",
+		});
+	}
+};
+
+// update vendor
+const updateVendor = async (req, res) => {
+	try {
+		const vendorId = req.params.id;
+		const updates = req.body;
+
+		// Find the vendor by its ID
+		const vendor = await Vendor.findById(vendorId);
+
+		if (!vendor) {
+			return res.status(404).json({ success: false, message: 'vendor not found' });
+		}
+
+		// Update the vendor properties with the values from req.body
+		if (updates.image) {
+			vendor.image = updates.image;
+		}
+		if (updates.name) {
+			vendor.name = updates.name;
+		}
+		if (updates.email) {
+			vendor.email = updates.email;
+		}
+		if (updates.password) {
+			const salt = await bcrypt.genSalt(10)
+			const hashedPassword = await bcrypt.hash(updates.password, salt)
+			vendor.password = hashedPassword;
+		}
+		if (updates.address) {
+			vendor.address = updates.address;
+		}
+		if (updates.phoneNumber) {
+			vendor.phoneNumber = updates.phoneNumber;
+		}
+		if (updates.brn) {
+			vendor.brn = updates.brn;
+		}
+		if (updates.description) {
+			vendor.description = updates.description;
+		}
+
+		// Save the updated vendor to the database
+		await vendor.save();
+
+		return res.status(200).json({
+			success: true,
+			updatedvendor: vendor,
+		});
+	} catch (error) {
+		return res.status(500).json({ success: false, error: error.message });
+	}
+};
+
+// export controller functions
+module.exports = {
+	registerVendor,
+	loginVendor,
+	searchVendors,
+	getVendor,
+	getAllVendors,
+	deleteVendor,
+	updateVendor
+};

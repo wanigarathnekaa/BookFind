@@ -15,21 +15,55 @@ const BookPage = ({ instance }) => {
 
   const styles={
     button:{
-      backgroundColor: "#18B1C8",
+      backgroundColor: "#00909E",
       "&:hover": {
-        backgroundColor: "#18B1C8",
+        backgroundColor: "#00909E",
       },
       marginTop: "4rem",
     },
+    container:{
+      paddingTop:"2rem",
+    },
+    left:{
+      display:"flex",
+      justifyContent: "center",
+      alignItems: "center",
+      paddingBottom: "3rem"
+    },
+    right:{
+      padding: "0rem 3.5rem",
+    },
     content:{
+      // padding: " 0rem 4rem",
+      color: "#DAE1E7",
+      textAlign: "justify",
+    },
+    image:{
+      width:"65%",
+      justifyContent: "center",
+      // paddingLeft: "4rem",
+      // paddingTop: "4rem",
+    },
+    name:{
+      // color:"#DAE1E7",
+      color: "#64CCC5",
+      fontWeight: "bold",
+      textShadow: "0.2rem 0.2rem 1rem #176B87",
+    },
+    author:{
+      color:"#DAE1E7",
+      fontWeight: "bold",
+      fontSize: "1.6rem",   
+
+    },
+    span:{
+      fontSize: "1.6rem",   
       paddingTop: "2rem",
       color: "#DAE1E7",
     },
-    image:{
-      width:"50%",
-      paddingLeft: "4rem",
-      paddingTop: "4rem",
-    }
+    rating:{
+      color:"#DAE1E7"
+    },
   };
 
 
@@ -55,34 +89,42 @@ const BookPage = ({ instance }) => {
   return (
     <>
       <Navbar />
-      <Grid container>
-        <Grid item xs={12} sm={4}>
+      <Grid container style={styles.container}>
+        <Grid item xs={12} sm={4} style={styles.left}>
           {/* Content for the left side */}
           <img
-            src="https://via.placeholder.com/200"
+            src={bookData.image}
             alt="Book Cover"
             style={styles.image}
           />
         </Grid>
-        <Grid item xs={12} sm={8}>
+        <Grid item xs={12} sm={8} style={styles.right}>
           {/* Content for the right side */}
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4" gutterBottom style={styles.name}>
             {bookData.name}
           </Typography>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom style={styles.author}>
             {bookData.author}
           </Typography>
+
           <Rating name="book-rating" value={4.2} precision={0.01} readOnly />
+          <Typography variant="h6" gutterBottom style={styles.rating}>
+            {bookData.rating}
+          </Typography>
+
+          <Typography variant="body1" gutterBottom style={styles.span}>Description</Typography>
           <Typography variant="body1" gutterBottom style={styles.content}>
-            Description
-            <br />
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
+            {/* <Span style={styles.span}>Description</Span> */}
+            
+            {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
             possimus vel cupiditate, iusto qui culpa quo pariatur suscipit?
             Architecto nam quisquam officia autem commodi, aliquid maxime veniam
             hic molestias soluta. Lorem ipsum dolor sit amet consectetur
             adipisicing elit. Iste veritatis quod non modi odio, natus sequi!
             Labore dolore similique animi illo alias officiis sunt ex, nesciunt,
-            voluptas, pariatur beatae corrupti!
+            voluptas, pariatur beatae corrupti! */}
+
+            {bookData.description}
           </Typography>
 
           <Link to={`/availablebookstores?book=${bookData._id}`}>

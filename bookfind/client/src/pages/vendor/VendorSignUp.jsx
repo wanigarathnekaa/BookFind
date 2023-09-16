@@ -27,7 +27,7 @@ const Form = styled("form")({
 
 const TextFieldWrapper = styled(TextField)({
   margin: "8px",
-  width: "25ch",
+  width: "60%",
 });
 
 const ButtonWrapper = styled(Button)({
@@ -35,51 +35,42 @@ const ButtonWrapper = styled(Button)({
 });
 
 const VendorSignUp = () => {
-  const [bookstoreName, setBookstoreName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [brn, setBrn] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [formData, setFormData] = useState({
+    bookstoreName: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+    brn: "",
+    password: "",
+    confirmPassword: "",
+    agreeTerms: false,
+    profilePicture: null,
+  });
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    console.log("Form data:", formData);
     // Handle form submission here
   };
 
-  const Form = styled("form")({
-    // margin: "3rem",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    // marginTop: "32px",
-    backgroundColor: "#DAE1E7", 
-    minHeight: "100vh",
-  });
+  const handleProfilePictureChange = (event) => {
+    setProfilePicture(event.target.files[0]);
+  };
 
-  const TextFieldWrapper = styled(TextField)({
-    margin: "8px",
-    width: "60%",
-
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "#27496D",
-        borderWidth: "0.1rem",
-      },
-      "&:hover fieldset": {
-        borderColor: "#27496D",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#27496D",
-      },
-    },
-    "& .MuiFormLabel-root": {
-      color: "#27496D",
-    },
-    "& .MuiInputBase-input": {
-      color: "#27496D",
+  const ButtonWrapper = styled(Button)({
+    margin: "16px",
+    backgroundColor: "#27496D",
+    color: "#fff",
+    "&:hover": {
+      backgroundColor: "#193A5E",
     },
   });
 
@@ -88,7 +79,7 @@ const VendorSignUp = () => {
       <ThemeProvider theme={theme}>
         <Grid container>
           <Grid item xs={12} sm={4}></Grid>
-          <Grid item xs={12} sm={8}>
+          <Grid item xs={12} sm={8} sx={{ backgroundColor: "#DAE1E7" }}>
             <Form onSubmit={handleSubmit}>
               <Typography
                 variant="h3"
@@ -105,56 +96,113 @@ const VendorSignUp = () => {
 
               <TextFieldWrapper
                 label="Bookstore Name"
-                value={bookstoreName}
-                onChange={(event) => setBookstoreName(event.target.value)}
+                name="bookstoreName"
+                value={formData.bookstoreName}
+                onChange={onChange}
               />
               <TextFieldWrapper
                 label="Email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                name="email"
+                value={formData.email}
+                onChange={onChange}
               />
               <TextFieldWrapper
                 label="Phone Number"
-                value={phoneNumber}
-                onChange={(event) => setPhoneNumber(event.target.value)}
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={onChange}
               />
               <TextFieldWrapper
                 label="Address"
-                value={address}
-                onChange={(event) => setPhoneNumber(event.target.value)}
+                name="address"
+                value={formData.address}
+                onChange={onChange}
               />
               <TextFieldWrapper
                 label="BRN"
-                value={brn}
-                onChange={(event) => setBrn(event.target.value)}
+                name="brn"
+                value={formData.brn}
+                onChange={onChange}
               />
               <TextFieldWrapper
                 label="Password"
                 type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                name="password"
+                value={formData.password}
+                onChange={onChange}
               />
               <TextFieldWrapper
                 label="Confirm Password"
                 type="password"
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={onChange}
+              />
+              <TextFieldWrapper
+                sx={{
+                  margin: "8px",
+                  width: "60%",
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      // borderColor: "#27496D",
+                      borderWidth: "0.1rem",
+                    },
+                    "&:hover fieldset": {
+                      // borderColor: "#27496D",
+                    },
+                    "&.Mui-focused fieldset": {
+                      // borderColor: "#27496D",
+                    },
+                  },
+                  "& .MuiFormLabel-root": {
+                    // color: "#27496D",
+                  },
+                  "& .MuiInputBase-input": {
+                    // color: "#27496D",
+                  },
+                  "& .MuiInputBase-input[type=file]": {
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    opacity: "0",
+                    zIndex: "2",
+                  },
+                  "& .MuiInputBase-root": {
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    zIndex: "1",
+                  },
+                  "& .MuiInputBase-root::before": {
+                    // color: "#27496D",
+                    // content: '"Choose File"',
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: "0",
+                  },
+                }}
+                label="Profile Picture"
+                type="file"
+                name="profilePicture"
+                onChange={onChange}
               />
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={agreeTerms}
-                    onChange={(event) => setAgreeTerms(event.target.checked)}
-                    //   color="primary"
+                    cchecked={formData.agreeTerms}
+                    onChange={onChange}
+                    name="agreeTerms"
                   />
                 }
                 label="I agree to the terms and conditions"
               />
+
               <ButtonWrapper
                 variant="contained"
-                //   color="primary"
                 type="submit"
-                disabled={!agreeTerms}
+                disabled={!formData.agreeTerms}
               >
                 Sign Up
               </ButtonWrapper>

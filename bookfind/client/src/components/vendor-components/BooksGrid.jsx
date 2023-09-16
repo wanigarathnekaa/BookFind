@@ -9,18 +9,41 @@ import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
+import { Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 function BookForm({ open, onClose, onSubmit }) {
   const [name, setName] = React.useState("");
-  const [author, setAddress] = React.useState("");
   const [isbn, setISBN] = React.useState("");
+  const [author, setAddress] = React.useState("");
+  const [publisher, setPublisher] = React.useState("");
+  const [clicks, setClicks] = React.useState(0);
   const [description, setDescription] = React.useState("");
   const [noOfPages, setNoOfPages] = React.useState(1);
-  const [bookPic, setBookPic] = React.useState("");
-  const [publishDate, setPublishDate] = React.useState("");
+  const [rating, setRating] = React.useState(0);
+
+  // const [copies, setCopies] = React.useState(1);
   const [categories, setCategories] = React.useState([]);
-  const [publisher, setPublisher] = React.useState("");
-  const [copies, setCopies] = React.useState(1);
+  const [image, setImage] = React.useState();
+  const [publishedDate, setPublishedDate] = React.useState("");
+  // const [unitPrice, setUnitPrice] = React.useState(1);
+  const [imageName, setImageName] = React.useState("");
+
+  const VisuallyHiddenInput = styled("input")`
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    white-space: nowrap;
+    width: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -31,11 +54,14 @@ function BookForm({ open, onClose, onSubmit }) {
       publisher,
       description,
       noOfPages,
-      bookPic,
-      publishDate,
+      image,
+      publishedDate,
       categories,
-      copies,
+      // copies,
       publisher,
+      // unitPrice,
+      rating,
+      image: imageName,
     });
     onClose();
   };
@@ -50,6 +76,9 @@ function BookForm({ open, onClose, onSubmit }) {
         name,
         author,
         publisher,
+        description,
+        image: imageName,
+        rating,
       })
       .then((obj) => {
         console.log("Book Added");
@@ -60,11 +89,53 @@ function BookForm({ open, onClose, onSubmit }) {
       });
   };
 
+  const [selectedFile, setSelectedFile] = React.useState(null);
+  const handleFileChange = async (e) => {
+    e.preventDefault();
+
+    const file = e.target.files[0];
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        // Replace 'your-backend-url' with the actual URL of your backend API endpoint.
+        const response = await axios.post(
+          "http://localhost:8080/api/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setImageName(response.data[0].filename, () => {
+          console.log("Image uploaded successfully:", imageName);
+        });
+        console.log(response.data[0].filename);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Add Book</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit}>
+          <div>
+            <span>Select Book Image here</span>{" "}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                e.preventDefault();
+                handleFileChange(e);
+              }}
+            />
+          </div>
           <TextField
             label="Name"
             value={name}
@@ -79,10 +150,10 @@ function BookForm({ open, onClose, onSubmit }) {
             fullWidth
             margin="normal"
           />
-          {/* <TextField
-            label="publisher"
-            value={isbn}
-            onChange={(e) => setISBN(e.target.value)}
+          <TextField
+            label="Publisher"
+            value={publisher}
+            onChange={(e) => setPublisher(e.target.value)}
             fullWidth
             margin="normal"
           />
@@ -101,30 +172,75 @@ function BookForm({ open, onClose, onSubmit }) {
             margin="normal"
           />
           <TextField
+            label="Rating"
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          {/* <TextField
             label="Book Picture"
-            value={bookPic}
+            value={image}
+            sx={{
+              // margin: "8px",
+              // width: "60%",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  // borderColor: "#27496D",
+                  borderWidth: "0.1rem",
+                },
+                "&:hover fieldset": {
+                  // borderColor: "#27496D",
+                },
+                "&.Mui-focused fieldset": {
+                  // borderColor: "#27496D",
+                },
+              },
+              "& .MuiFormLabel-root": {
+                // color: "#27496D",
+              },
+              "& .MuiInputBase-input": {
+                // color: "#27496D",
+              },
+              "& .MuiInputBase-input[type=file]": {
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                opacity: "0",
+                zIndex: "2",
+              },
+              "& .MuiInputBase-root": {
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                zIndex: "1",
+              },
+              "& .MuiInputBase-root::before": {
+                // color: "#27496D",
+                // content: '"Choose File"',
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: "0",
+              },
+            }}
             onChange={(e) => setBookPic(e.target.value)}
+            type="file"
             fullWidth
             margin="normal"
-          />
-          <TextField
+          /> */}
+          {/* <TextField
             label="Publish Date"
-            value={publishDate}
+            value={publishedDate}
             onChange={(e) => setPublishDate(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Categories"
-            value={categories}
-            onChange={(e) => setCategories(e.target.value)}
             fullWidth
             margin="normal"
           /> */}
           <TextField
-            label="Publisher"
-            value={publisher}
-            onChange={(e) => setPublisher(e.target.value)}
+            label="Categories"
+            value={categories}
+            onChange={(e) => setCategories(e.target.value)}
             fullWidth
             margin="normal"
           />
@@ -158,129 +274,67 @@ const columns = [
     headerName: "Index",
     width: 150,
   },
-  // {
-  //   field: "bookID",
-  //   headerName: "ID",
-  //   width: 150,
-  // },
   {
     field: "name",
     headerName: "Name",
-    width: 150,
+    width: 250,
+    editable: true,
   },
   {
     field: "author",
     headerName: "Author",
-    width: 150,
+    width: 250,
+    editable: true,
   },
-  // {
-  //   field: "isbn",
-  //   headerName: "ISBN",
-  //   width: 150,
-  // },
-  // {
-  //   field: "brn",
-  //   headerName: "BRN",
-  //   width: 150,
-  // },
-  // {
-  //   field: "rating",
-  //   headerName: "Rating",
-  //   width: 150,
-  // },
-  // {
-  //   field: "categories",
-  //   headerName: "Categories",
-  //   width: 150,
-  // },
   {
     field: "publisher",
     headerName: "Publisher",
+    width: 250,
+    editable: true,
+  },
+  {
+    field: "clicks",
+    headerName: "Clicks",
     width: 150,
   },
-  // {
-  //   field: "description",
-  //   headerName: "Description",
-  //   width: 150,
-  // },
-  // {
-  //   field: "noOfPages",
-  //   headerName: "No Of Pages",
-  //   width: 150,
-  // },
-  // {
-  //   field: "publishDate",
-  //   headerName: "Publish Date",
-  //   width: 150,
-  // },
-  // {
-  //   field: "bookPic",
-  //   headerName: "Book Pic",
-  //   width: 150,
-  // },
-  // {
-  //   field: "unitPrice",
-  //   headerName: "Unit Price",
-  //   width: 150,
-  // },
-  // {
-  //   field: "copies",
-  //   headerName: "Copies",
-  //   width: 150,
-  // },
-];
-
-const rows = [
   {
-    id: 1,
-    bookID: 1,
-    name: "Book 1",
-    author: "Author 1",
-    isbn: "12345678",
-    brn: "12345678",
-    rating: 1,
-    categories: "Category 1",
-    publisher: "Publisher 1",
-    description: "Description 1",
-    noOfPages: 1,
-    publishDate: "2021-10-10",
-    bookPic: "Book Pic 1",
-    unitPrice: 1,
-    copies: 1,
+    field: "description",
+    headerName: "Description",
+    width: 400,
+    editable: true,
   },
   {
-    id: 2,
-    bookID: 2,
-    name: "Book 2",
-    author: "Author 2",
-    isbn: "12345678",
-    brn: "12345678",
-    rating: 2,
-    categories: "Category 2",
-    publisher: "Publisher 2",
-    description: "Description 2",
-    noOfPages: 2,
-    publishDate: "2021-10-10",
-    bookPic: "Book Pic 2",
-    unitPrice: 2,
-    copies: 2,
+    field: "isbn",
+    headerName: "ISBN",
+    width: 250,
   },
   {
-    id: 3,
-    bookID: 3,
-    name: "Book 3",
-    author: "Author 3",
-    isbn: "12345678",
-    brn: "12345678",
-    rating: 3,
-    categories: "Category 3",
-    publisher: "Publisher 3",
-    description: "Description 3",
-    noOfPages: 3,
-    publishDate: "2021-10-10",
-    bookPic: "Book Pic 3",
-    unitPrice: 3,
-    copies: 3,
+    field: "noOfPages",
+    headerName: "No of Pages",
+    width: 250,
+  },
+  {
+    field: "rating",
+    headerName: "Rating",
+    width: 250,
+  },
+  {
+    field: "image",
+    headerName: "Image",
+    width: 250,
+    editable: true,
+  },
+  // {
+  //   field: "publishedDate",
+  //   headerName: "Published Date",
+  //   width: 250,
+  //   editable: true,
+  // },
+  {
+    field: "categories",
+    headerName: "Categories",
+    width: 250,
+    editable: true,
   },
 ];
 
@@ -314,7 +368,7 @@ export default function BooksGrid() {
           ...book,
           id: id++,
         }));
-        // console.log("hi",renamedBookList)
+        console.log(renamedBookList);
         setBookList(renamedBookList);
       })
       .catch(() => {
@@ -361,6 +415,7 @@ export default function BooksGrid() {
 
   return (
     <>
+      {/* <Typography variant="h4" sx={{ textAlign: "center" }}>Books</Typography> */}
       <Box
         sx={{
           width: "100%",
@@ -398,7 +453,7 @@ export default function BooksGrid() {
             pageSizeOptions={[5]}
             checkboxSelection
             onRowSelectionModelChange={(id) => handleCheckBoxSelection(id)}
-            disableRowSelectionOnClick
+            // disableRowSelectionOnClick
           />
         </Box>
         {/* Conditionally render the form component */}
